@@ -1,5 +1,3 @@
-declare class SchemaType {
-    yooo: string;
-    constructor(config: object);
+export declare class Generator {
+    constructor(customType: object);
 }
-export default SchemaType;

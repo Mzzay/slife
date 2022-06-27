@@ -63,7 +63,7 @@ class Select {
     ;
     // Execute the query
     then(resolve, reject) {
-        let query = `SELECT ${this.columns} FROM ${this.table}`;
+        let query = `SELECT ${this.columns} FROM ${this.table} `;
         let methodList = [
             queryBuilder_1.default.Where(this.whereValue),
             queryBuilder_1.default.LimitAndOffset(this.limitNumber, this.offsetNumber),

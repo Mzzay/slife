@@ -73,7 +73,7 @@ class Select<T> {
 
     // Execute the query
     public then(resolve, reject): Promise<T[]> {
-        let query = `SELECT ${this.columns} FROM ${this.table}`;
+        let query = `SELECT ${this.columns} FROM ${this.table} `;
 
         let methodList: string[] = [
             QueryBuilder.Where(this.whereValue),

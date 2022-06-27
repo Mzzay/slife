@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class SchemaType {
-    constructor(config) {
-        if (config != undefined)
-            return;
-        for (let key in config) {
-            this[key] = config[key];
+exports.Generator = void 0;
+class Generator {
+    constructor(customType) {
+        for (const key in customType) {
+            this[key] = customType[key];
         }
     }
 }
-exports.default = SchemaType;
+exports.Generator = Generator;
