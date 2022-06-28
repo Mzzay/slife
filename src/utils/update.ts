@@ -27,7 +27,7 @@ class Update {
     // Execute the query
     public then(resolve, reject): Promise<any> {
         if (this.columns == undefined)
-            reject("Error: columns is undefined.");
+            throw "Error: no columns are provided.";
         
         let promiseList: Promise<any>[] = [];
         

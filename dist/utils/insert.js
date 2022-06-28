@@ -25,6 +25,10 @@ class Insert {
     // Execute insert command
     then(resolve, reject) {
         let promiseList = [];
+        if (!this.table)
+            throw "Error: Table name is undefined.";
+        if (this.insertValue.length == 0)
+            throw "Error: Insert value is undefined.";
         this.insertValue.forEach(obj => {
             let listOfKeys = Object.keys(obj);
             let listOfValues = Object.values(obj);

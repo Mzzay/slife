@@ -28,6 +28,8 @@ class Delete {
         return this;
     }
     then(resolve, reject) {
+        if (!this.table)
+            throw "Error: Table name is undefined.";
         if (!Array.isArray(this.table))
             this.table = [this.table];
         let promiseList = [];

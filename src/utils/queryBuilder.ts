@@ -22,7 +22,7 @@ class QueryBuilder {
         let listOfValues: string[] = Object.values(config);
 
         if (listOfKeys.length == 0)
-            throw "[Slife]: Update request needs setter."
+            throw "Error: Update request needs setter."
 
         return listOfKeys.map((e,i) => `${e} = '${listOfValues[i]}'`).join(', ');
     }

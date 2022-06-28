@@ -1,10 +1,12 @@
-export interface Where {
+import { string } from "mathjs";
+
+export type Where = {
     columns: string;
     operator: string;
     value: string;
 }
 
-export interface ConnParameters {
+export type ConnParameters = {
     host: string;
     user: string;
     password: string;
@@ -12,7 +14,7 @@ export interface ConnParameters {
     port?: number
 }
 
-export interface OrderByClause {
+export type OrderByClause = {
     columns: string;
     order?: string;
 }

@@ -63,6 +63,10 @@ class Select {
     ;
     // Execute the query
     then(resolve, reject) {
+        if (!this.table)
+            throw "Error: Table name is undefined.";
+        if (!this.columns)
+            throw "Error: Columns are not provided.";
         let query = `SELECT ${this.columns} FROM ${this.table} `;
         let methodList = [
             queryBuilder_1.default.Where(this.whereValue),

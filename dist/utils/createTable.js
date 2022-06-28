@@ -18,8 +18,12 @@ class CreateTable {
         this.conn = conn;
     }
     then(resolve, reject) {
+        if (!this.table)
+            throw "Error: Table name is undefined.";
         let columnsKeysList = Object.keys(this.columns);
         let columnsValuesList = Object.values(this.columns);
+        if (columnsKeysList.length == 0)
+            throw "Error: Columns to create are not provided.";
         let query = `CREATE TABLE ${this.table} (${columnsKeysList.map((e, i) => `${e} ${columnsValuesList[i]}`).join(",")})`;
         return new Promise((res, rej) => {
             this.conn.query(query, (err, result) => {

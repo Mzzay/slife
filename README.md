@@ -41,7 +41,7 @@ Slife accept actually every simple query like SELECT, UPDATE, DELETE, CREATE and
 ```js
 await db.createTable("my_first_table", {
     name: "VARCHAR(255)",
-    age: "INT(255)
+    age: "INT(255)"
 });
 ```
 
@@ -102,6 +102,12 @@ await db.delete("my_first_table");
 // or
 await db.delete("my_first_table")
         .where("age", "=", 21);
+```
+
+### Raw
+You can execute brut SQL query by using `raw` method.
+```js
+await db.raw("SELECT * FROM my_first_table");
 ```
 
 ## Contacts

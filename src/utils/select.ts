@@ -73,6 +73,12 @@ class Select<T> {
 
     // Execute the query
     public then(resolve, reject): Promise<T[]> {
+        if (!this.table)
+            throw "Error: Table name is undefined."
+        
+        if (!this.columns)
+            throw "Error: Columns are not provided."
+
         let query = `SELECT ${this.columns} FROM ${this.table} `;
 
         let methodList: string[] = [

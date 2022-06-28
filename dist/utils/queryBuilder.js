@@ -17,7 +17,7 @@ QueryBuilder.Set = (config) => {
     let listOfKeys = Object.keys(config);
     let listOfValues = Object.values(config);
     if (listOfKeys.length == 0)
-        throw "[Slife]: Update request needs setter.";
+        throw "Error: Update request needs setter.";
     return listOfKeys.map((e, i) => `${e} = '${listOfValues[i]}'`).join(', ');
 };
 // building LIMIT / OFFSET query for SELECT

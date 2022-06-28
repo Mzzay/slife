@@ -1,16 +1,16 @@
-export interface Where {
+export declare type Where = {
     columns: string;
     operator: string;
     value: string;
-}
-export interface ConnParameters {
+};
+export declare type ConnParameters = {
     host: string;
     user: string;
     password: string;
     database: string;
     port?: number;
-}
-export interface OrderByClause {
+};
+export declare type OrderByClause = {
     columns: string;
     order?: string;
-}
+};
