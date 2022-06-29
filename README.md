@@ -103,6 +103,14 @@ await db.delete("my_first_table");
 await db.delete("my_first_table")
         .where("age", "=", 21);
 ```
+###
+Union are useful with MySQL, to use them proceed like this.
+```js
+await db.select("*").from("my_first_table")
+        .where('name', '=', 'mzzay').union([
+            db.select("*").from("my_second_table")
+        ])
+```
 
 ### Raw
 You can execute brut SQL query by using `raw` method.
