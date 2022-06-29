@@ -103,7 +103,7 @@ await db.delete("my_first_table");
 await db.delete("my_first_table")
         .where("age", "=", 21);
 ```
-###
+### Union
 Union are useful with MySQL, to use them proceed like this.
 ```js
 await db.select("*").from("my_first_table")
