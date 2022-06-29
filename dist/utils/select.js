@@ -14,6 +14,7 @@ class Select {
     constructor(table, columns, whereValue = [], conn) {
         this.whereValue = [];
         this.orderByList = [];
+        this.unionList = [];
         // for TypeScript usage
         this.run = (resolve = undefined, reject = undefined) => __awaiter(this, void 0, void 0, function* () { return this.then(resolve, reject); });
         this.table = table;
@@ -61,19 +62,32 @@ class Select {
         return Object.assign(Object.assign({}, defaults), options);
     }
     ;
-    // Execute the query
-    then(resolve, reject) {
+    // UNION
+    union(instances) {
+        this.unionList = instances;
+        return this;
+    }
+    ToSQL() {
         if (!this.table)
             throw "Error: Table name is undefined.";
         if (!this.columns)
             throw "Error: Columns are not provided.";
         let query = `SELECT ${this.columns} FROM ${this.table} `;
-        let methodList = [
-            queryBuilder_1.default.Where(this.whereValue),
-            queryBuilder_1.default.LimitAndOffset(this.limitNumber, this.offsetNumber),
-            queryBuilder_1.default.OrderBy(this.orderByList),
-        ];
-        query = query.concat(methodList.map(e => e).join(" "));
+        query = queryBuilder_1.default.ToSQL(query, {
+            whereValue: this.whereValue,
+            limitNumber: this.limitNumber,
+            offsetNumber: this.offsetNumber,
+            orderByList: this.orderByList
+        });
+        return queryBuilder_1.default.Clean(query);
+    }
+    // Execute the query
+    then(resolve, reject) {
+        let query = this.ToSQL();
+        this.unionList.forEach((instance) => {
+            let instanceQuery = instance.ToSQL();
+            query = query.concat(" UNION " + instanceQuery);
+        });
         return new Promise((res, rej) => {
             this.conn.query(query, (err, result) => {
                 if (err)

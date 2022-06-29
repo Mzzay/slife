@@ -18,8 +18,8 @@ class DatabaseOperation {
     }
 
     // INSERT
-    public insert(columns: object | object[]): Insert {
-        let insertLine = Array.isArray(columns) ? columns : [columns];
+    public insert(columns: {[key: string] : number | boolean | string} | {[key: string] : number | boolean | string}[]): Insert {
+        let insertLine: {[key: string] : number | boolean | string}[] = Array.isArray(columns) ? columns : [columns];
         return new Insert(undefined, insertLine, this.conn);
     }
 
@@ -29,7 +29,7 @@ class DatabaseOperation {
     }
 
     // UPDATE
-    public update(tableName: string, columns: object) : Update {
+    public update(tableName: string, columns: {[key: string ] : number | boolean | string}) : Update {
         return new Update(tableName, columns, this.conn); 
     }
 

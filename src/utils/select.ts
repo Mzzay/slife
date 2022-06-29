@@ -13,6 +13,8 @@ class Select<T> {
 
     private orderByList: OrderByClause[] = [];
 
+    private unionList: Select<any>[] = [];
+
     constructor(table: string | string[], columns: string | string[], whereValue: Where[] = [], conn: Connection) {
         this.table = table;
         this.whereValue = whereValue;
@@ -32,7 +34,7 @@ class Select<T> {
     }
 
     // WHERE: condition
-    public where(columns: string, operator: string, value: string): Select<T> {
+    public where(columns: string, operator: string, value: string | number): Select<T> {
         this.whereValue.push({
             columns,
             operator,
@@ -71,8 +73,13 @@ class Select<T> {
         };
     };
 
-    // Execute the query
-    public then(resolve, reject): Promise<T[]> {
+    // UNION
+    public union(instances: Select<any>[]): Select<T> {
+        this.unionList = instances;
+        return this;
+    }
+
+    public ToSQL(): string {
         if (!this.table)
             throw "Error: Table name is undefined."
         
@@ -81,13 +88,24 @@ class Select<T> {
 
         let query = `SELECT ${this.columns} FROM ${this.table} `;
 
-        let methodList: string[] = [
-            QueryBuilder.Where(this.whereValue),
-            QueryBuilder.LimitAndOffset(this.limitNumber, this.offsetNumber),
-            QueryBuilder.OrderBy(this.orderByList),
-        ];
+        query = QueryBuilder.ToSQL(query, {
+            whereValue: this.whereValue,
+            limitNumber: this.limitNumber,
+            offsetNumber: this.offsetNumber,
+            orderByList: this.orderByList
+        });
 
-        query = query.concat(methodList.map(e => e).join(" "));
+        return QueryBuilder.Clean(query);
+    }
+
+    // Execute the query
+    public then(resolve, reject): Promise<T[]> {
+        let query: string = this.ToSQL();
+        
+        this.unionList.forEach((instance: Select<any>) => {
+            let instanceQuery: string = instance.ToSQL();
+            query = query.concat(" UNION " + instanceQuery);
+        })
         
         return new Promise<T[]>((res, rej) => {
             this.conn.query(query, (err, result) => {

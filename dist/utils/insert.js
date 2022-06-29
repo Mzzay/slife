@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const queryBuilder_1 = require("./queryBuilder");
 class Insert {
     constructor(table, insertValue, conn) {
         // for TypeScript usage
@@ -32,7 +33,7 @@ class Insert {
         this.insertValue.forEach(obj => {
             let listOfKeys = Object.keys(obj);
             let listOfValues = Object.values(obj);
-            let query = `INSERT INTO ${this.table} (${listOfKeys.join(",")}) VALUES(${listOfValues.map(e => `'${e}'`).join(",")})`;
+            let query = `INSERT INTO ${this.table} (${listOfKeys.join(",")}) VALUES(${queryBuilder_1.default.ParserList(listOfValues)})`;
             promiseList.push(new Promise((res, rej) => {
                 this.conn.query(query, (err, result) => {
                     if (err)

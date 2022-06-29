@@ -8,7 +8,7 @@ class Update {
     private conn: Connection;
     private whereValue: Where[] = [];
 
-    constructor(table: string | string[], columns: object, conn: Connection) {
+    constructor(table: string | string[], columns: {[key: string] : number | boolean | string}, conn: Connection) {
         this.table = table;
         this.columns = columns;
         this.conn = conn;

@@ -1,4 +1,6 @@
-import { OrderByClause, Where } from "../models/SlifeInterface";
+import Slife = require("..");
+import { OrderByClause, SelectSQL, Where } from "../models/SlifeInterface";
+import Select from "./select";
 
 // Build partition of query
 class QueryBuilder {
@@ -18,13 +20,13 @@ class QueryBuilder {
 
     // building SET query for UPDATE
     static Set = (config: object): string => {
-        let listOfKeys: string[] = Object.keys(config);
-        let listOfValues: string[] = Object.values(config);
+        let listOfKeys: any[] = Object.keys(config);
+        let listOfValues: any[] = Object.values(config);
 
         if (listOfKeys.length == 0)
             throw "Error: Update request needs setter."
 
-        return listOfKeys.map((e,i) => `${e} = '${listOfValues[i]}'`).join(', ');
+        return listOfKeys.map((e,i) => `${e} = ${this.ParserString(listOfValues[i])}`).join(', ');
     }
 
     // building LIMIT / OFFSET query for SELECT
@@ -44,6 +46,37 @@ class QueryBuilder {
             return `${e.columns} ${e.order}`
         }).join(", ")}`
         return partition;
+    }
+
+    // build full SQL query
+    static ToSQL = (base: string, config: SelectSQL): string => {
+        let query = base;
+
+        let methodList: string[] = [
+            this.Where(config.whereValue),
+            this.LimitAndOffset(config.limitNumber, config.offsetNumber),
+            this.OrderBy(config.orderByList),
+        ];
+
+        query = query.concat(methodList.map(e => e).join(" "));
+
+        return query;
+    }
+
+    // clean space from the query
+    static Clean = (query: string): string => query.split(' ').filter(e => e.length > 0).join(" ");
+
+    static ParserList = (listOfValues: any[]) => {
+        return listOfValues.map(e => {
+            return this.ParserString(e);
+        }).join(",");
+    }
+
+    static ParserString = (key: string): number | string | boolean => {
+        if (typeof key == "boolean" || typeof key == "number")
+            return key;
+            
+        return `'${key}'`;
     }
 }
 

@@ -8,9 +8,15 @@ declare class DatabaseOperation {
     conn: Connection;
     constructor(conn?: Connection);
     select<T>(columns: string | string[]): Select<T>;
-    insert(columns: object | object[]): Insert;
+    insert(columns: {
+        [key: string]: number | boolean | string;
+    } | {
+        [key: string]: number | boolean | string;
+    }[]): Insert;
     createTable(tableName: string, columns: object): CreateTable;
-    update(tableName: string, columns: object): Update;
+    update(tableName: string, columns: {
+        [key: string]: number | boolean | string;
+    }): Update;
     delete(tableName: string | string[]): Delete;
     raw(command: string): Promise<any>;
 }

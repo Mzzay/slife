@@ -1,11 +1,13 @@
 import { Connection } from "mysql";
+import { InsertRes } from "../models/SlifeInterface";
+import QueryBuilder from "./queryBuilder";
 
 class Insert {
     private table: string | string[];
     private conn: Connection;
     private insertValue: object[];
 
-    constructor(table: string | string[], insertValue: object[], conn: Connection) {
+    constructor(table: string | string[], insertValue: {[key: string ] : number | boolean | string}[], conn: Connection) {
         this.table = table;
         this.conn = conn;
         this.insertValue = insertValue;
@@ -18,7 +20,7 @@ class Insert {
     }
 
     // Execute insert command
-    public then(resolve, reject): Promise<any> {
+    public then(resolve, reject): Promise<InsertRes> {
         let promiseList: Promise<any>[] = []
 
         if (!this.table)
@@ -28,9 +30,10 @@ class Insert {
             throw "Error: Insert value is undefined."
 
         this.insertValue.forEach(obj => {
-            let listOfKeys = Object.keys(obj);
-            let listOfValues = Object.values(obj);
-            let query = `INSERT INTO ${this.table} (${listOfKeys.join(",")}) VALUES(${listOfValues.map(e => `'${e}'`).join(",")})`;
+            let listOfKeys: any[] = Object.keys(obj);
+            let listOfValues: any[] = Object.values(obj);
+            let query = `INSERT INTO ${this.table} (${listOfKeys.join(",")}) VALUES(${QueryBuilder.ParserList(listOfValues)})`;
+            
             promiseList.push(new Promise((res, rej) => {
                 this.conn.query(query, (err, result) => {
                     if (err) return rej(err);
@@ -45,7 +48,7 @@ class Insert {
 
 
     // for TypeScript usage
-    public run = async(resolve = undefined, reject = undefined) : Promise<any> => this.then(resolve, reject);
+    public run = async(resolve = undefined, reject = undefined) : Promise<InsertRes> => this.then(resolve, reject);
 }
 
 export default Insert;

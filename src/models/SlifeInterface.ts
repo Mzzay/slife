@@ -1,9 +1,7 @@
-import { string } from "mathjs";
-
 export type Where = {
     columns: string;
     operator: string;
-    value: string;
+    value: string | number;
 }
 
 export type ConnParameters = {
@@ -17,4 +15,22 @@ export type ConnParameters = {
 export type OrderByClause = {
     columns: string;
     order?: string;
+}
+
+export interface SelectSQL {
+    whereValue: Where[];
+    limitNumber: number;
+    offsetNumber: number;
+    orderByList: OrderByClause[];
+}
+
+export type InsertRes = {
+    fieldCount: number;
+    affectedRows: number;
+    insertId: number;
+    serverStatus: number;
+    warningCount: number;
+    message: string;
+    protocol41: boolean;
+    changedRows: number;
 }
