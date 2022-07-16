@@ -75,7 +75,8 @@ class QueryBuilder {
     static ParserString = (key: string): number | string | boolean => {
         if (typeof key == "boolean" || typeof key == "number")
             return key;
-            
+        
+        key = key.split("").map(e => e == '\'' ? '\\\'' : e).join("");
         return `'${key}'`;
     }
 }
