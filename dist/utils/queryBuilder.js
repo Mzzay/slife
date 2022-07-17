@@ -58,7 +58,6 @@ QueryBuilder.ParserList = (listOfValues) => {
 QueryBuilder.ParserString = (key) => {
     if (typeof key == "boolean" || typeof key == "number")
         return key;
-    console.log(key);
     key = key.split("").map(e => e == '\'' ? '\\\'' : e).join("");
     return `'${key}'`;
 };
